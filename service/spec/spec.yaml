@@ -1,0 +1,4 @@
+proton: ServiceSpec
+instances:
+  - name: apprunner-svc
+    environment: apprunner-env

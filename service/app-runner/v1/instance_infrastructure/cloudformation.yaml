@@ -3,17 +3,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: CloudFormation template that deploys hello-app-runner app
 
-Mappings:
-  # The App Runner configuration is passed in via the environment spec.
-  AppRunnerConfig:
-    Service:
-      PORT: '{{ environment.inputs.http_port}}'
-      NAME: '{{ environment.inputs.app_runner_name}}'
-
 Parameters:
   ServiceName:
     Type: String
-    Default: !FindInMap ['AppRunnerConfig', 'Service', 'NAME']
+    Default: '{{ environment.inputs.apprunner_name }}'
     Description: Name for your App Runner service.
 
 Resources:
@@ -29,7 +22,7 @@ Resources:
           ImageIdentifier: public.ecr.aws/aws-containers/hello-app-runner:latest
           ImageRepositoryType: ECR_PUBLIC
           ImageConfiguration:
-            Port: !FindInMap ['AppRunnerConfig', 'Service', 'PORT']
+            Port: '{{ environment.inputs.http_port }}'
 Outputs:
   Endpoint:
     Description: "The endpoint of the App Runner service."
