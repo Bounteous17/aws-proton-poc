@@ -1,0 +1,36 @@
+# Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudFormation template that deploys hello-app-runner app
+
+Mappings:
+  # The App Runner configuration is passed in via the environment spec.
+  AppRunnerConfig:
+    Service:
+      PORT: '{{ environment.inputs.http_port}}'
+      NAME: '{{ environment.inputs.app_runner_name}}'
+
+Parameters:
+  ServiceName:
+    Type: String
+    Default: !FindInMap ['AppRunnerConfig', 'Service', 'NAME']
+    Description: Name for your App Runner service.
+
+Resources:
+  Service:
+    Metadata:
+      'aws:apprunner:description': 'hello-app-runner example service'
+    Type: AWS::AppRunner::Service
+    Properties:
+      ServiceName: !Ref ServiceName
+      SourceConfiguration:
+        AutoDeploymentsEnabled: false
+        ImageRepository:
+          ImageIdentifier: public.ecr.aws/aws-containers/hello-app-runner:latest
+          ImageRepositoryType: ECR_PUBLIC
+          ImageConfiguration:
+            Port: !FindInMap ['AppRunnerConfig', 'Service', 'PORT']
+Outputs:
+  Endpoint:
+    Description: "The endpoint of the App Runner service."
+    Value: !GetAtt Service.ServiceUrl
