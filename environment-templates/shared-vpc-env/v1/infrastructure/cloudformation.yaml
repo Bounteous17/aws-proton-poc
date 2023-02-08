@@ -42,6 +42,14 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateSubnet1RouteTable
       DestinationCidrBlock: 0.0.0.0/0
+  ApprunnerVpcConnector:
+    Type: AWS::AppRunner::VpcConnector
+    Properties:
+      VpcConnectorName: '{{environment.name}}-vpc-connector'
+      Subnets:
+        - !Ref 'PrivateSubnet1'
+      SecurityGroups: 
+        - !GetAtt VPC.DefaultSecurityGroup
 
 Outputs:
   VPC:
