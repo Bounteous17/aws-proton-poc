@@ -42,7 +42,6 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateSubnet1RouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref PublicSubnet1NATGateway
 
 Outputs:
   VPC:
